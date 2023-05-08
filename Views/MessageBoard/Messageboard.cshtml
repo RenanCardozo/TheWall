@@ -1,0 +1,11 @@
+@{
+    int userId = 0;
+    int? sessionUserId = Context.Session.GetInt32("userId");
+    if (sessionUserId is not null)
+    {
+        userId = (int)sessionUserId;
+    }
+}
+
+<partial name="_MessagePostForm" />
+<partial name="_MessagesComments" />

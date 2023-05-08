@@ -1,0 +1,56 @@
+@{
+    int userId = 0;
+    int? sessionUserId = Context.Session.GetInt32("userId");
+    if (sessionUserId is not null)
+    {
+        userId = (int)sessionUserId;
+    }
+}
+
+@model MessageBoardView
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            @foreach (Message message in Model.Messages)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">@message.Creator?.FirstName.Substring(0, 1).ToUpper()@message.Creator.FirstName.Substring(1) @message.Creator?.LastName.Substring(0, 1).ToUpper(). - @message.CreatedAt.ToString("MMMM dd, yyyy")</h5>
+                        <p class="card-text">@message.MessageText</p>
+                        @if (message.Creator.UserId == sessionUserId)
+                        {
+                            <form method="post" asp-controller="MessageBoard" asp-action="DeleteMessage" asp-route-messageId="@message.MessageId">
+                                <button type="submit" class="btn btn-danger m-3">Delete Message</button>
+                            </form>
+                        }
+                    </div>
+                    <div class="card-footer">
+                        <h6>Comments:</h6>
+                        @foreach (Comment comment in message.Commenter)
+                        {
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2">@comment.Creator.FirstName.Substring(0, 1).ToUpper()@comment.Creator.FirstName.Substring(1) @comment.Creator.LastName.Substring(0,1).ToUpper(). - @message.CreatedAt.ToString("MMMM dd, yyyy")</h6>                                    <p class="card-text">@comment.CommentText</p>
+                                    @if (comment.Creator.UserId == sessionUserId)
+                                    {
+                                        <form method="post" asp-controller="MessageBoard" asp-action="DeleteComment" asp-route-commentId="@comment.CommentId">
+                                            <button type="submit" class="btn btn-danger m-3">Delete Comment</button>
+                                        </form>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        
+                        <form method="post" asp-controller="MessageBoard" asp-action="AddComment" asp-route-messageId="@message.MessageId">
+                            <div class="form-group">
+                                <label for="commentContent">Comment:</label>
+                                <textarea class="form-control" name="commentText" id="commentContent" rows="2"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary m-3">Submit Comment</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

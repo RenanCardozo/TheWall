@@ -1,0 +1,21 @@
+@{
+    int userId = 0;
+    int? sessionUserId = Context.Session.GetInt32("userId");
+    if (sessionUserId is not null)
+    {
+        userId = (int)sessionUserId;
+    }
+}
+@model MessageBoardView
+
+<form method="post" asp-action="AddMessage" asp-controller="MessageBoard">
+    <div>
+
+    <label asp-for="@Model.Message.MessageText"></label>
+    <textarea asp-for="@Model.Message.MessageText" cols="30" rows="10" class="form-select"></textarea>
+    <span asp-validation-for="@Model.Message.MessageText" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success m-3">
+        Create Message
+    </button>
+</form>

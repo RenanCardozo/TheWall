@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-success mb-4 shadow">
+    <div class="container">
+        @if(Context.Session.GetInt32("userId") is null){
+        <a class="navbar-brand" href="/users/dashboard">The Coding Dojo Wall </a>
+        }
+        @if (Context.Session.GetString("firstName") is not null)
+        {
+            <h3 class="navbar-text mb-0">Welcome @Context.Session.GetString("firstName")  @Context.Session.GetString("lastName") TO THE WALL !</h3>
+        }
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            @if (Context.Session.GetInt32("userId") is not null)
+            {
+                <form asp-action="Logout" asp-controller="User" method="post">
+                    <input type="submit" value="LOGOUT" class="btn btn-sm btn-danger">
+                </form>
+            }
+        </div>
+    </div>
+</nav>
